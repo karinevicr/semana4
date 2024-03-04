@@ -26,6 +26,7 @@ var platforms;
 var player;
 var score = 0;
 var scoreText;
+// teste
 
 function preload ()
 {
