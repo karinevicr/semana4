@@ -7,7 +7,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 30},
-            debug:true
+            debug:false
         }
 
     },
@@ -21,15 +21,19 @@ var config = {
 
 var game = new Phaser.Game(config);
 
+// essas são as variaveis ultilizadas no jogo
 var text;
 var platforms;
 var player;
 var score = 0;
 var scoreText;
-// teste
+
 
 function preload ()
 {
+
+    // imagens e spritesheets utilizadas
+
     this.load.image('fundo', 'assets/praia.jpg');
     this.load.image('picole', 'assets/picole2.png');
     this.load.image('ground', 'assets/ground.png');
@@ -40,18 +44,22 @@ function preload ()
 
 function create (){
 
+    // aqui foi adicionado o fundo e as plataformas
+
     this.add.image(400, 300, 'fundo');
     
     platforms = this.physics.add.staticGroup();
     platforms.create(400, 568, 'ground').setScale(2).refreshBody();
     platforms.create(650, 400, 'ground');
-    platforms.create(50, 250, 'ground');
+    platforms.create(70, 250, 'ground');
     platforms.create(750, 220, 'ground');
 
     player = this.physics.add.sprite(100, 450, 'dude');
 
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
+
+    // criação da movimentação do personagem
 
     this.anims.create({
         key: 'left',
@@ -73,7 +81,7 @@ function create (){
         repeat: -1
     });
     
-        picole = this.physics.add.sprite(400, 0, 'picole').setScale(0.5); // tamanho picole
+        picole = this.physics.add.sprite(400, 0).setScale(0.5); // tamanho picole
         picole.setCollideWorldBounds(true); // coloca bordas no mundo
         picole.setBounce(0.7); // quanto o obj bate e estica
     
@@ -99,21 +107,16 @@ function create (){
 
         this.physics.add.overlap(player, picole, collectPicole, null, this);
 
-        function collectPicole (player, picole)
-{
-    picole.disableBody(true, true);
 
-}
-
-scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
   
-function collectPicole (player, picole)
-{
-    picole.disableBody(true, true);
+    function collectPicole (player, picole)
+    {
+        picole.disableBody(true, true);
 
-    score += 10;
-    scoreText.setText('Score: ' + score);
-}
+        score += 10;
+        scoreText.setText('Score: ' + score);
+    }
 
 }
     
@@ -124,28 +127,28 @@ function update ()
     cursors = this.input.keyboard.createCursorKeys();
 
     if (cursors.left.isDown)
-{
-    player.setVelocityX(-160);
+    {
+        player.setVelocityX(-160);
 
-    player.anims.play('left', true);
-}
-else if (cursors.right.isDown)
-{
-    player.setVelocityX(160);
+        player.anims.play('left', true);
+    }
+    else if (cursors.right.isDown)
+    {
+        player.setVelocityX(160);
 
-    player.anims.play('right', true);
-}
-else
-{
-    player.setVelocityX(0);
+        player.anims.play('right', true);
+    }
+    else
+    {
+        player.setVelocityX(0);
 
-    player.anims.play('turn');
-}
+        player.anims.play('turn');
+    }
 
-if (cursors.up.isDown && player.body.touching.down)
-{
-    player.setVelocityY(-330);
-}
+    if (cursors.up.isDown && player.body.touching.down)
+    {
+        player.setVelocityY(-330);
+    }
     
 
 }
